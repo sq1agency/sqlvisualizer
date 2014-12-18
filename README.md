@@ -5,5 +5,5 @@ Current iteration requires Coffeescript.
 
 ```
   npm install
-  coffee app.coffee > FILE_NAME_OF_CHOICE.md
+  coffee index.coffee > FILE_NAME_OF_CHOICE.md
 ```
