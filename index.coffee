@@ -6,6 +6,19 @@ config =
   database: 'DATABASE'
   host: 'HOST'
 
+pkg = require path.join(__dirname, 'package.json')
+# Setting up the command line argument functionality.
+program = require 'commander'
+program
+  .version pkg.version
+  .usage '[options] <file>'
+  .option '-h, --host <host>', 'Database host location'
+  .option '-d, --database <database>', 'Database name'
+  .option '-u, --user <user>', 'Database user name'
+  .option '-p, --password <password>', 'Database password'
+  .option '-s, --sql [value]', 'The database\'s SQL type.'
+  .parse process.argv
+
 # This is just a few regular expressions I use.
 regex =
   from: /FROM \(?\(?([a-zA-Z0-9_\-]+)/gi
