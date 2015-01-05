@@ -4,6 +4,7 @@
   "description": "A really quick app that automatically creates a simple HTML documents containing materialized view definitions in Postgres, as well as a view structure graph. ",
   "main": "index.coffee",
   "dependencies": {
+    "bluebird": "^2.5.3",
     "commander": "^2.5.1",
     "pg": "^4.1.1"
   },

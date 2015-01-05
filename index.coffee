@@ -52,7 +52,9 @@ html = """
 pg.connect config, (err, client, done) ->
   if err? then return console.error 'Problem connecting to postgres.', err
 
-  client.query "SELECT definition, matviewname FROM pg_matviews", (err, result) ->
+  client.query """
+    SELECT definition, matviewname FROM pg_matviews
+  """, (err, result) ->
     done()
 
     if err then return console.error 'Error running query.', err
