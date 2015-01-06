@@ -13,7 +13,7 @@ program
   .option '-d, --database <database>', 'Database name'
   .option '-u, --user <user>', 'Database user name'
   .option '-p, --password <password>', 'Database password'
-  .option '-s, --sql [value]', 'The database\'s SQL type.'
+  .option '-s, --sql <sql>', 'The database\'s SQL type.'
   .parse process.argv
 
 config =

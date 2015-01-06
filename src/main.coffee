@@ -7,6 +7,17 @@ Promise = require 'bluebird'
 
 # Database types.
 postgres = require './postgres'
+mssql    = require './mssql'
+
+sanitize = (string) ->
+  string = string.replace /[\[]/g, ''
+  string = string.replace /[\]]/g, ''
+  string = string.toLowerCase()
+  return string
+
+sanitizeMore = (string) ->
+  string = string.replace /[\s]/g, ''
+  return string
 
 # Requires a SQL definition (postgres, mysql, mssql, etc) and a configuration
 # object that can contain:
@@ -16,7 +27,7 @@ postgres = require './postgres'
 #   database
 module.exports = (sql, config) ->
   # Default is postgres.
-  sql = 'postgres' or sql
+  sql = sql or 'postgres'
 
   # We need configurations!
   if !config? then throw new Error 'No configuration settings sent.'
@@ -54,7 +65,7 @@ module.exports = (sql, config) ->
       # find themselves connected, some won't.
       if tables.length > 0
         for table in tables
-          graph += " \n#{table};"
+          graph += " \n#{sanitizeMore(table)}[#{sanitize(table)}];"
 
       # For views and materialized views, we need to parse and build the
       # needed relationships.
@@ -69,26 +80,26 @@ module.exports = (sql, config) ->
             if m.index is db.relationshipRegex.from.lastIndex
               db.relationshipRegex.from.lastIndex += 1
 
-            viewObj[view.name].pullsFrom.push m[1]
+            viewObj[view.name].pullsFrom.push sanitize(m[1])
 
             while (m = db.relationshipRegex.join.exec view.definition) isnt null
               if m.index is db.relationshipRegex.from.lastIndex
                 db.relationshipRegex.from.lastIndex += 1
 
-              viewObj[view.name].joins.push m[1]
+              viewObj[view.name].joins.push sanitize(m[1])
 
             if view.definition.match(db.relationshipRegex.union)?
               viewObj[view.name].union = true
 
             for other in viewObj[view.name].pullsFrom
-              graph += " \n#{other}-->#{view.name};"
+              graph += " \n#{sanitizeMore(other)}[#{other}]-->#{sanitizeMore(view.name)}[#{other}];"
 
             for other in viewObj[view.name].joins
-              graph += " \n#{other}-->#{view.name};"
+              graph += " \n#{sanitizeMore(other)}[#{other}]-->#{sanitizeMore(view.name)}[#{other}];"
 
           res += """
 
-          ## #{view.name}
+          ## #{sanitize(view.name)}
 
           ```
           #{view.definition}
@@ -108,26 +119,26 @@ module.exports = (sql, config) ->
             if m.index is db.relationshipRegex.from.lastIndex
               db.relationshipRegex.from.lastIndex += 1
 
-            matViewObj[view.name].pullsFrom.push m[1]
+            matViewObj[view.name].pullsFrom.push sanitize(m[1])
 
             while (m = db.relationshipRegex.join.exec view.definition) isnt null
               if m.index is db.relationshipRegex.from.lastIndex
                 db.relationshipRegex.from.lastIndex += 1
 
-              matViewObj[view.name].joins.push m[1]
+              matViewObj[view.name].joins.push sanitize(m[1])
 
             if view.definition.match(db.relationshipRegex.union)?
               matViewObj[view.name].union = true
 
             for other in matViewObj[view.name].pullsFrom
-              graph += " \n#{other}-->#{view.name};"
+              graph += " \n#{sanitizeMore(other)}[#{other}]-->#{sanitizeMore(view.name)}[#{other}];"
 
             for other in matViewObj[view.name].joins
-              graph += " \n#{other}-->#{view.name};"
+              graph += " \n#{sanitizeMore(other)}[#{other}]-->#{sanitizeMore(view.name)}[#{other}];"
 
           res += """
 
-          ## #{view.name}
+          ## #{sanitize(view.name)}
 
           ```
           #{view.definition}
