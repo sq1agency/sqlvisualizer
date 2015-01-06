@@ -17,6 +17,7 @@ sanitize = (string) ->
 
 sanitizeMore = (string) ->
   string = string.replace /[\s]/g, ''
+  string = string.replace /[\-]/g, ''
   return string
 
 # Requires a SQL definition (postgres, mysql, mssql, etc) and a configuration
@@ -91,11 +92,13 @@ module.exports = (sql, config) ->
             if view.definition.match(db.relationshipRegex.union)?
               viewObj[view.name].union = true
 
-            for other in viewObj[view.name].pullsFrom
-              graph += " \n#{sanitizeMore(other)}[#{other}]-->#{sanitizeMore(view.name)}[#{other}];"
+          for other in viewObj[view.name].pullsFrom
+            if sanitizeMore(other) isnt sanitizeMore(sanitize(view.name))
+              graph += " \n#{sanitizeMore(other)}[#{other}]-->#{sanitizeMore(sanitize(view.name))}[#{sanitize(view.name)}];"
 
-            for other in viewObj[view.name].joins
-              graph += " \n#{sanitizeMore(other)}[#{other}]-->#{sanitizeMore(view.name)}[#{other}];"
+          for other in viewObj[view.name].joins
+            if sanitizeMore(other) isnt sanitizeMore(sanitize(view.name))
+              graph += " \n#{sanitizeMore(other)}[#{other}]-->#{sanitizeMore(sanitize(view.name))}[#{sanitize(view.name)}];"
 
           res += """
 
@@ -130,11 +133,13 @@ module.exports = (sql, config) ->
             if view.definition.match(db.relationshipRegex.union)?
               matViewObj[view.name].union = true
 
-            for other in matViewObj[view.name].pullsFrom
-              graph += " \n#{sanitizeMore(other)}[#{other}]-->#{sanitizeMore(view.name)}[#{other}];"
+          for other in viewObj[view.name].pullsFrom
+            if sanitizeMore(other) isnt sanitizeMore(sanitize(view.name))
+              graph += " \n#{sanitizeMore(other)}[#{other}]-->#{sanitizeMore(sanitize(view.name))}[#{sanitize(view.name)}];"
 
-            for other in matViewObj[view.name].joins
-              graph += " \n#{sanitizeMore(other)}[#{other}]-->#{sanitizeMore(view.name)}[#{other}];"
+          for other in viewObj[view.name].joins
+            if sanitizeMore(other) isnt sanitizeMore(sanitize(view.name))
+              graph += " \n#{sanitizeMore(other)}[#{other}]-->#{sanitizeMore(sanitize(view.name))}[#{sanitize(view.name)}];"
 
           res += """
 
@@ -185,6 +190,9 @@ createHtml = (config, markdown, graph) ->
       </div>
 
       <xmp theme="united" style="display:none;">
+        ```
+        #{graph}
+        ```
         #{markdown}
       </xmp>
 

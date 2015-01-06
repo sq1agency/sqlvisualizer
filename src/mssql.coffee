@@ -27,6 +27,7 @@ module.exports = (config) ->
           SELECT * FROM INFORMATION_SCHEMA.TABLES
           WHERE TABLE_TYPE = 'BASE TABLE'
         """, (err, recordset) ->
+          console.log err
           rows = []
           for record in recordset
             rows.push "dbo.#{record.TABLE_NAME}".toLowerCase()
