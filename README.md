@@ -1,19 +1,30 @@
 Simple as pie! Will create an html document that will create a view structure
 graph and a markdown-style set of query definitions for those views.
 
-Current iteration requires Coffeescript.
-
 Built using Mermaid and Strapdown.js.
 
-**NOTE**: You'll need to change the config variable in index to use.
+```
+  npm install -g
+```
 
+## Usage
 ```
-  npm install
-  coffee index.coffee > FILE_OF_CHOICE.html
+  sqlvisualizer -f file.html -h host.local -u user -p password -d database
 ```
+
+## Command Line Options
+**-f, --file <file>** - The location of the file in which the HTML is stored.
+
+**-h, --host <host>** - Database host location
+
+**-d, --database <database>** - Database name
+
+**-u, --user <user>** - Database user name
+
+**-p, --password <password>** - Database password
 
 ## Plans
-  1. Make a pure command line nodejs module.
-  2. Allow for throwing configuration settings using the package command.
-  3. Add support for MSSQL and MySQL.
-  4. Create a build process to release builds in Javascript.
+  [X] Make a pure command line nodejs module.
+  [X] Allow for throwing configuration settings using the package command.
+  [] Add support for MSSQL and MySQL.
+  [] Create a build process to release builds in Javascript.
