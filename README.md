@@ -24,7 +24,7 @@ Built using Mermaid and Strapdown.js.
 **-p, --password <password>** - Database password
 
 ## To Do
-  [x] Make a pure command line nodejs module.
-  [x] Allow for throwing configuration settings using the package command.
-  [ ] Add support for MSSQL and MySQL.
-  [ ] Create a build process to release builds in Javascript.
+- [x] Make a pure command line nodejs module.
+- [x] Allow for throwing configuration settings using the package command.
+- [ ] Add support for MSSQL and MySQL.
+- [ ] Create a build process to release builds in Javascript.
