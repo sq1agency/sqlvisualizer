@@ -190,9 +190,6 @@ createHtml = (config, markdown, graph) ->
       </div>
 
       <xmp theme="united" style="display:none;">
-        ```
-        #{graph}
-        ```
         #{markdown}
       </xmp>
 
