@@ -27,5 +27,5 @@ Built using Mermaid and Strapdown.js.
 - [x] Make a pure command line nodejs module.
 - [x] Allow for throwing configuration settings using the package command.
 - [x] Add support for MSSQL.
-- [x] Add support for MySQL.
+- [ ] Add support for MySQL.
 - [ ] Create a build process to release builds in Javascript.
